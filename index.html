@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b12">
+<title>ARUK AI — Personal Intelligence</title>
+<style>
+:root {
+  --bg:#070b12;
+  --panel:rgba(15,24,38,.78);
+  --line:rgba(112,183,255,.16);
+  --cyan:#5cecff;
+  --blue:#6199ff;
+  --text:#edf6ff;
+  --muted:#8496ac;
+  --green:#75ffd1;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  min-height:100vh;overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;
+  background:
+    radial-gradient(ellipse at 50% 10%,rgba(30,104,180,.18),transparent 40%),
+    radial-gradient(ellipse at 100% 80%,rgba(38,57,139,.12),transparent 35%),
+    #070b12;
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  opacity:.18;
+  background-image:linear-gradient(rgba(110,190,255,.05) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(110,190,255,.05) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,black,transparent 85%);
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{
+  height:76px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;border-bottom:1px solid var(--line);
+  background:rgba(5,10,17,.78);backdrop-filter:blur(18px);
+  position:sticky;top:0;z-index:20;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{
+  width:42px;height:42px;border:1px solid #4cdff0;border-radius:13px;
+  display:grid;place-items:center;color:var(--cyan);font-weight:900;
+  box-shadow:0 0 22px #39bce522,inset 0 0 15px #39bce515;
+}
+.brand-name{font-size:19px;font-weight:850;letter-spacing:3px}
+.brand-sub{font-size:9px;letter-spacing:2.2px;color:var(--muted);margin-top:4px}
+.top-right{display:flex;align-items:center;gap:18px}
+.status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.dot{width:7px;height:7px;background:#ffbf69;border-radius:50%;box-shadow:0 0 12px #ffbf69}
+.clock{font-size:12px;color:#b6c8dc;font-variant-numeric:tabular-nums}
+.layout{width:min(1440px,94%);margin:auto;padding:30px 0 50px}
+.hero{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;
+  min-height:390px;
+}
+.eyebrow{font-size:10px;letter-spacing:3px;color:var(--cyan);font-weight:800}
+h1{font-size:clamp(38px,5.5vw,70px);line-height:1.04;letter-spacing:-2.8px;margin:19px 0}
+h1 span{
+  background:linear-gradient(100deg,#f1fbff 5%,#62e8ff 48%,#7a9fff 95%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-copy{font-size:14px;line-height:1.9;color:#92a5bc;max-width:490px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.btn{
+  border:1px solid var(--line);border-radius:10px;padding:12px 17px;
+  color:var(--text);background:rgba(25,43,64,.7);transition:.2s;
+}
+.btn:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.btn-primary{
+  background:linear-gradient(110deg,#6cecff,#87b5ff);color:#06101a;
+  border:0;font-weight:800;box-shadow:0 5px 30px #42cfff22;
+}
+.core-wrap{display:grid;place-items:center;position:relative;min-height:360px}
+.core{
+  width:220px;height:220px;border-radius:50%;position:relative;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 45%,#1a5775 0%,#102b48 22%,#091522 48%,#07101b 68%);
+  border:1px solid #63e8ff80;
+  box-shadow:0 0 28px #3bdcff24,0 0 90px #237dff20,inset 0 0 40px #3bdcff16;
+  animation:breathe 4s ease-in-out infinite;
+}
+.core:before,.core:after{
+  content:"";position:absolute;border-radius:50%;inset:-18px;
+  border:1px solid #5cecff65;transform:rotateX(65deg) rotate(-25deg);
+}
+.core:after{inset:-35px;border-color:#658fff4a;transform:rotateX(68deg) rotate(36deg)}
+.core-inner{
+  width:105px;height:105px;border:1px solid #8df4ff;
+  border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle,#286e91,#0a2032 70%);
+  box-shadow:0 0 28px #5cecff50,inset 0 0 20px #5cecff28;
+}
+.core-logo{font-size:34px;font-weight:300;color:#d5fbff;letter-spacing:-4px}
+.core-ring{
+  position:absolute;inset:-51px;border:1px dashed #64bfff50;border-radius:50%;
+  animation:spin 28s linear infinite;
+}
+.core-ring:before,.core-ring:after{
+  content:"";position:absolute;width:7px;height:7px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 15px var(--cyan);top:15%;left:15%;
+}
+.core-ring:after{top:auto;left:auto;bottom:13%;right:12%;background:#91a9ff}
+.core-label{position:absolute;bottom:4px;text-align:center}
+.core-label strong{display:block;font-size:11px;letter-spacing:3px;color:var(--cyan)}
+.core-label small{display:block;margin-top:8px;font-size:9px;letter-spacing:2px;color:var(--muted)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{50%{box-shadow:0 0 42px #3bdcff35,0 0 110px #237dff30,inset 0 0 48px #3bdcff22}}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:24px 0 15px}
+.section-head h2{font-size:16px;letter-spacing:1px;margin:0}
+.section-head p{margin:6px 0 0;font-size:11px;color:var(--muted)}
+.modules{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.module{
+  text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:19px;min-height:145px;transition:.25s;
+  color:var(--text);position:relative;overflow:hidden;
+}
+.module:hover{border-color:#5cecff70;transform:translateY(-3px);background:#112136}
+.module-icon{
+  width:37px;height:37px;border:1px solid #5cecff40;border-radius:10px;
+  display:grid;place-items:center;color:var(--cyan);font-size:17px;margin-bottom:16px;
+}
+.module h3{font-size:13px;margin:0 0 8px;letter-spacing:.4px}
+.module p{font-size:11px;color:var(--muted);line-height:1.7;margin:0}
+.module-status{font-size:9px;color:#ffcf89;letter-spacing:1px;margin-top:13px}
+.module-status.ready{color:var(--green)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.7fr);gap:15px;margin-top:30px}
+.panel{
+  border:1px solid var(--line);border-radius:16px;
+  background:linear-gradient(145deg,rgba(16,28,43,.92),rgba(9,16,27,.9));
+  overflow:hidden;
+}
+.panel-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.panel-title{font-size:12px;font-weight:800;letter-spacing:1.6px}
+.panel-kicker{font-size:9px;color:var(--muted);margin-top:6px}
+.chat-body{padding:20px;min-height:270px;max-height:390px;overflow:auto}
+.message{display:flex;gap:12px;margin-bottom:18px;align-items:flex-start}
+.avatar{
+  width:30px;height:30px;flex:0 0 30px;border-radius:9px;
+  display:grid;place-items:center;font-size:10px;font-weight:900;
+  background:#103b50;border:1px solid #5cecff40;color:var(--cyan);
+}
+.message.user .avatar{background:#26334f;color:#b8c9ff;border-color:#829dff40}
+.bubble{font-size:12px;line-height:1.8;color:#c9d8e9;padding-top:2px;white-space:pre-wrap;overflow-wrap:anywhere}
+.message-name{font-size:9px;letter-spacing:1.4px;color:var(--cyan);margin-bottom:6px;font-weight:800}
+.message.user .message-name{color:#a8bcff}
+.chat-form{border-top:1px solid var(--line);padding:14px;display:flex;gap:9px}
+.chat-input{
+  flex:1;min-width:0;background:#080f1a;border:1px solid #253b52;
+  border-radius:10px;padding:13px;color:var(--text);outline:none;font-size:12px;
+}
+.chat-input:focus{border-color:#5cecff80}
+.send-btn{width:46px;border:0;border-radius:10px;background:var(--cyan);color:#06111a;font-weight:900}
+.send-btn:disabled{opacity:.45;cursor:wait}
+.side-body{padding:19px}
+.system-row{display:flex;justify-content:space-between;gap:10px;padding:14px 0;border-bottom:1px solid #ffffff0b;font-size:11px}
+.system-row:last-child{border:0}
+.system-row span{color:var(--muted)}
+.system-row strong{font-size:10px;color:#ffcf89;font-weight:600;text-align:right}
+.mini-note{margin-top:18px;padding:13px;border:1px solid #6c9fff22;border-radius:10px;background:#1b2b431f;color:var(--muted);font-size:10px;line-height:1.8}
+.footer{
+  border-top:1px solid var(--line);margin-top:35px;padding-top:20px;
+  display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;
+  color:#657990;font-size:10px;letter-spacing:.5px;
+}
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);
+  background:#13263a;border:1px solid #5cecff70;color:#e8faff;
+  padding:12px 18px;border-radius:10px;font-size:12px;opacity:0;
+  pointer-events:none;transition:.25s;z-index:100;max-width:90vw;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:850px){
+  .hero{grid-template-columns:1fr;text-align:center;padding-top:25px}
+  .hero-copy{margin:auto}.hero-actions{justify-content:center}
+  .core-wrap{min-height:340px}
+  .modules{grid-template-columns:repeat(2,1fr)}
+  .workspace{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .topbar{height:65px;padding:0 4%}.brand-name{font-size:16px}
+  .brand-sub{font-size:8px}.status{font-size:0}.status .dot{width:8px;height:8px}
+  .clock{font-size:10px}.layout{width:92%;padding-top:12px}
+  h1{letter-spacing:-1.5px}.core{width:180px;height:180px}
+  .core-inner{width:88px;height:88px}.core-logo{font-size:29px}
+  .core-wrap{min-height:300px}.modules{gap:9px}
+  .module{padding:14px;min-height:150px}.section-head{align-items:start;gap:10px}
+  .section-head p{max-width:150px;line-height:1.6}
+}
+@media(prefers-reduced-motion:reduce){
+  ,:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">A</div>
+    <div>
+      <div class="brand-name">ARUK <span style="color:var(--cyan)">AI</span></div>
+      <div class="brand-sub">PERSONAL INTELLIGENCE</div>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="status"><i class="dot" id="statusDot"></i><span id="statusText">AI NOT CONNECTED</span></div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">YOUR INTELLIGENCE. YOUR COMMAND.</div>
+      <h1>Beyond an<br><span>ordinary assistant.</span></h1>
+      <p class="hero-copy">
+        Meet ARUK AI — your personal intelligence interface.
+        Think, explore, create and build from one command center.
+        Designed for a smarter way to work.
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="focusChat">✦ Activate AI Chat</button>
+        <button class="btn" id="voiceButton">🎙️ Voice Input</button>
+        <button class="btn" id="soundButton">♫ Sound OFF</button>
+      </div>
+    </div>
+    <div class="core-wrap">
+      <div class="core">
+        <div class="core-ring"></div>
+        <div class="core-inner"><div class="core-logo">A<span style="color:var(--cyan)">.</span></div></div>
+      </div>
+      <div class="core-label">
+        <strong>ARUK CORE</strong>
+        <small>PERSONAL INTELLIGENCE SYSTEM</small>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <div><h2>INTELLIGENCE MODULES</h2><p>Tools and capabilities at your command.</p></div>
+    <div class="eyebrow">SYSTEM / 01</div>
+  </div>
+
+  <section class="modules">
+    <button class="module" data-module="chat">
+      <div class="module-icon">✧</div><h3>AI Intelligence</h3>
+      <p>Ask questions, explore ideas and solve problems with AI.</p>
+      <div class="module-status" id="moduleAI">● CONNECTION REQUIRED</div>
+    </button>
+    <button class="module" data-module="voice">
+      <div class="module-icon">⌁</div><h3>Voice Interface</h3>
+      <p>Use speech input and spoken responses where supported.</p>
+      <div class="module-status ready">● BROWSER FEATURE</div>
+    </button>
+    <button class="module" data-module="automation">
+      <div class="module-icon">⟳</div><h3>Automation Engine</h3>
+      <p>A future home for connected, permission-based workflows.</p>
+      <div class="module-status">● PLANNED</div>
+    </button>
+    <button class="module" data-module="vision">
+      <div class="module-icon">◎</div><h3>Vision System</h3>
+      <p>Image understanding can be added through a connected AI service.</p>
+      <div class="module-status">● PLANNED</div>
+    </button>
+    <button class="module" data-module="lab">
+      <div class="module-icon">⌘</div><h3>Code Laboratory</h3>
+      <p>Build, debug and explore technical ideas with your assistant.</p>
+      <div class="module-status">● AI CONNECTION REQUIRED</div>
+    </button>
+    <button class="module" data-module="security">
+      <div class="module-icon">⬡</div><h3>Security Guard</h3>
+      <p>Keep credentials on the backend, never inside this public page.</p>
+      <div class="module-status ready">● KEY PROTECTION PRINCIPLE</div>
+    </button>
+    <button class="module" data-module="workspace">
+      <div class="module-icon">▤</div><h3>Mission Workspace</h3>
+      <p>Use the command center to start a conversation and plan work.</p>
+      <div class="module-status ready">● INTERFACE READY</div>
+    </button>
+    <button class="module" data-module="system">
+      <div class="module-icon">◈</div><h3>System Monitor</h3>
+      <p>View the current interface and connection status.</p>
+      <div class="module-status ready">● LOCAL STATUS</div>
+    </button>
+  </section>
+
+  <section class="workspace" id="workspace">
+    <div class="panel">
+      <div class="panel-head">
+        <div><div class="panel-title">ARUK CONVERSATION</div><div class="panel-kicker">PERSONAL INTELLIGENCE CHANNEL</div></div>
+        <div class="eyebrow">CHAT / 01</div>
+      </div>
+      <div class="chat-body" id="chatBody" aria-live="polite">
+        <div class="message">
+          <div class="avatar">A</div>
+          <div><div class="message-name">ARUK AI</div><div class="bubble">Hello, Commander. The interface is online. My AI brain still needs to be connected. Once the secure backend is configured, you can chat with the intelligence engine here.</div></div>
+        </div>
+      </div>
+      <form class="chat-form" id="chatForm">
+        <input class="chat-input" id="chatInput" placeholder="Ask ARUK AI anything..." autocomplete="off" maxlength="4000" aria-label="Message to ARUK AI">
+        <button class="send-btn" id="sendButton" type="submit" aria-label="Send message">➤</button>
+      </form>
+    </div>
+
+    <aside class="panel">
+      <div class="panel-head">
+        <div><div class="panel-title">SYSTEM STATUS</div><div class="panel-kicker">LIVE INTERFACE DIAGNOSTICS</div></div>
+        <div class="eyebrow">SYS / 02</div>
+      </div>
+      <div class="side-body">
+        <div class="system-row"><span>Interface</span><strong style="color:var(--green)">ONLINE</strong></div>
+        <div class="system-row"><span>AI Backend</span><strong id="backendStatus">NOT CONFIGURED</strong></div>
+        <div class="system-row"><span>Voice Input</span><strong id="voiceStatus">CHECKING SUPPORT</strong></div>
+        <div class="system-row"><span>Speech Output</span><strong id="speechStatus">CHECKING SUPPORT</strong></div>
+        <div class="system-row"><span>API Key</span><strong>BACKEND ONLY</strong></div>
+        <div class="mini-note">
+          <strong style="color:#c9eaff">SECURITY NOTE</strong><br>
+          This public website must never contain your Gemini API key.
+          AI chat will work after the secure backend has been deployed and connected.
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <footer class="footer">
+    <span>© <span id="year"></span> ARUK AI · PERSONAL INTELLIGENCE</span>
+    <span>BUILT FOR CURIOSITY. DESIGNED FOR WHAT'S NEXT.</span>
+  </footer>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+  ARUK AI FRONTEND
+  Backend endpoint will be configured after the secure Worker is ready.
+  Never put a Gemini API key in this file.
+*/
+const BACKEND_URL = "";
+
+const $ = id => document.getElementById(id);
+let soundEnabled = false;
+let recognition = null;
+let toastTimer;
+
+function showToast(message){
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove("show"),3000);
+}
+
+function updateClock(){
+  $("clock").textContent = new Date().toLocaleTimeString([], {
+    hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"
+  });
+  $("year").textContent = new Date().getFullYear();
+}
+updateClock();
+setInterval(updateClock,1000);
+
+function setBackendStatus(connected){
+  $("statusText").textContent = connected ? "AI CONNECTED" : "AI NOT CONNECTED";
+  $("statusDot").style.background = connected ? "#75ffd1" : "#ffbf69";
+  $("statusDot").style.boxShadow = connected ? "0 0 12px #75ffd1" : "0 0 12px #ffbf69";
+  $("backendStatus").textContent = connected ? "CONNECTED" : "NOT CONFIGURED";
+  $("backendStatus").style.color = connected ? "var(--green)" : "#ffcf89";
+  $("moduleAI").textContent = connected ? "● CONNECTED" : "● CONNECTION REQUIRED";
+  $("moduleAI").classList.toggle("ready",connected);
+}
+setBackendStatus(false);
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(SpeechRecognition){
+  $("voiceStatus").textContent = "AVAILABLE";
+  $("voiceStatus").style.color = "var(--green)";
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-IN";
+  recognition.interimResults = false;
+  recognition.onresult = event => {
+    $("chatInput").value = event.results[0][0].transcript;
+    $("chatInput").focus();
+    showToast("Voice captured. Press send to submit.");
+  };
+  recognition.onerror = () => showToast("Voice input stopped. Check microphone permission.");
+  recognition.onend = () => $("voiceButton").textContent = "🎙️ Voice Input";
+}else{
+  $("voiceStatus").textContent = "NOT SUPPORTED";
+}
+
+if("speechSynthesis" in window){
+  $("speechStatus").textContent = "AVAILABLE";
+  $("speechStatus").style.color = "var(--green)";
+}else{
+  $("speechStatus").textContent = "NOT SUPPORTED";
+}
+
+$("focusChat").addEventListener("click",()=>{
+  $("workspace").scrollIntoView({behavior:"smooth",block:"center"});
+  setTimeout(()=>$("chatInput").focus(),350);
+});
+
+$("voiceButton").addEventListener("click",()=>{
+  if(!recognition){
+    showToast("Voice input is not supported in this browser.");
+    return;
+  }
+  try{
+    recognition.lang = /[\u0900-\u097F]/.test($("chatInput").value) ? "hi-IN" : "en-IN";
+    recognition.start();
+    $("voiceButton").textContent = "● Listening...";
+  }catch(e){
+    showToast("Microphone is busy. Try again.");
+  }
+});
+
+$("soundButton").addEventListener("click",()=>{
+  soundEnabled = !soundEnabled;
+  $("soundButton").textContent = soundEnabled ? "♫ Sound ON" : "♫ Sound OFF";
+  showToast(soundEnabled ? "Spoken replies enabled when supported." : "Spoken replies disabled.");
+});
+
+function addMessage(text,who){
+  const row = document.createElement("div");
+  row.className = "message" + (who === "user" ? " user" : "");
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = who === "user" ? "YOU" : "A";
+  const content = document.createElement("div");
+  const name = document.createElement("div");
+  name.className = "message-name";
+  name.textContent = who === "user" ? "COMMANDER" : "ARUK AI";
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+  content.append(name,bubble);
+  row.append(avatar,content);
+  $("chatBody").appendChild(row);
+  $("chatBody").scrollTop = $("chatBody").scrollHeight;
+  return bubble;
+}
+
+$("chatForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  const message = $("chatInput").value.trim();
+  if(!message) return;
+
+  addMessage(message,"user");
+  $("chatInput").value = "";
+
+  if(!BACKEND_URL){
+    addMessage("The interface is ready, but the secure AI backend has not been configured yet. We will connect the backend next. No API key belongs in this website.","ai");
+    return;
+  }
+
+  $("sendButton").disabled = true;
+  const replyBubble = addMessage("Connecting to intelligence engine...","ai");
+
+  try{
+    const response = await fetch(BACKEND_URL.replace(/\/$/,"") + "/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message})
+    });
+    const data = await response.json();
+    if(!response.ok) throw new Error(data.error || "AI request failed.");
+    replyBubble.textContent = data.reply || "The AI returned an empty response.";
+    if(soundEnabled && "speechSynthesis" in window){
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(replyBubble.textContent));
+    }
+  }catch(error){
+    replyBubble.textContent = "I couldn't reach the AI backend. Check the backend deployment and connection settings.";
+    console.error("ARUK AI request error:",error);
+  }finally{
+    $("sendButton").disabled = false;
+  }
+});
+
+document.querySelectorAll(".module").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const name = button.dataset.module;
+    if(name === "chat" || name === "workspace"){
+      $("workspace").scrollIntoView({behavior:"smooth",block:"center"});
+      setTimeout(()=>$("chatInput").focus(),350);
+      return;
+    }
+    const messages = {
+      voice:"Voice input and speech output use browser-supported features. Microphone permission may be required.",
+      automation:"Automation is planned. It will be enabled only after supported tools and permissions are connected.",
+      vision:"Vision is planned. An image-capable AI backend must be connected before this module can analyze images.",
+      lab:"Code assistance will be available through the connected AI conversation.",
+      security:"Security principle: keep API keys in backend secrets, never in public HTML or JavaScript.",
+      system:"The interface is running in your browser. AI connection status is shown in the system panel."
+    };
+    showToast(messages[name] || "Module selected.");
+  });
+});
+</script>
+</body>
+</html>
