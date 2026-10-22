@@ -376,7 +376,7 @@ function setBackendStatus(connected){
   $("moduleAI").textContent = connected ? "● CONNECTED" : "● CONNECTION REQUIRED";
   $("moduleAI").classList.toggle("ready",connected);
 }
-setBackendStatus(false);
+setBackendStatus(true);
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if(SpeechRecognition){
